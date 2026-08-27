@@ -11,6 +11,7 @@ import {
   Sun,
   Headphones,
   Volume2Icon,
+  Mic2,
 } from "lucide-react";
 import { Story } from "@/types";
 import { Button } from "./ui/button";
@@ -153,6 +154,23 @@ export function StoryReader({ story }: { story: Story }) {
                 </button>
               ))}
             </div>
+            {audio.voices.length > 1 && (
+              <div className="flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1.5">
+                <Mic2 size={13} className="shrink-0 text-muted" />
+                <select
+                  value={audio.voiceURI ?? ""}
+                  onChange={(e) => audio.selectVoice(e.target.value)}
+                  title="Narration voice"
+                  className="max-w-[140px] truncate bg-transparent text-xs font-medium text-muted outline-none sm:max-w-[180px]"
+                >
+                  {audio.voices.map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </>
         )}
 

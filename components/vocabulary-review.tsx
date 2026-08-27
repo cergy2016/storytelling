@@ -6,18 +6,11 @@ import { Story, VocabularyWord } from "@/types";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { useProgressStore } from "@/lib/store";
+import { speakText as speak } from "@/lib/voice";
 import { cn } from "@/lib/utils";
 
 function shuffle<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5);
-}
-
-function speak(word: string) {
-  if ("speechSynthesis" in window) {
-    const u = new SpeechSynthesisUtterance(word);
-    u.lang = "en-US";
-    window.speechSynthesis.speak(u);
-  }
 }
 
 function Flashcards({ words, story }: { words: VocabularyWord[]; story: Story }) {

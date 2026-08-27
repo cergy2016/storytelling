@@ -19,18 +19,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LevelBadge } from "@/components/level-badge";
 import { useProgressStore } from "@/lib/store";
+import { speakText as speak } from "@/lib/voice";
 import { cn } from "@/lib/utils";
 
 type StatusFilter = "all" | VocabStatus;
 type ViewMode = "list" | "cards" | "quiz";
-
-function speak(word: string) {
-  if ("speechSynthesis" in window) {
-    const u = new SpeechSynthesisUtterance(word);
-    u.lang = "en-US";
-    window.speechSynthesis.speak(u);
-  }
-}
 
 function shuffle<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5);

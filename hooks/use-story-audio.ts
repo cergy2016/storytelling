@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getEnglishVoices, pickBestVoice, setPreferredVoiceURI } from "@/lib/voice";
 
 export type PlaybackSpeed = 0.75 | 1 | 1.25 | 1.5;
 
@@ -26,10 +27,13 @@ export function useStoryAudio({
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState<PlaybackSpeed>(1);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [voiceURI, setVoiceURI] = useState<string | null>(null);
 
   const indexRef = useRef<number | null>(null);
   const speedRef = useRef<PlaybackSpeed>(1);
   const stoppedRef = useRef(false);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
   const speakIndexRef = useRef<(idx: number) => void>(() => {});
 
@@ -44,6 +48,33 @@ export function useStoryAudio({
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const loadVoices = () => {
+      const list = getEnglishVoices();
+      if (!list.length) return;
+      setVoices(list);
+      const best = pickBestVoice(list);
+      voiceRef.current = best;
+      setVoiceURI(best?.voiceURI ?? null);
+    };
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
+
+  const selectVoice = useCallback(
+    (uri: string) => {
+      const found = voices.find((v) => v.voiceURI === uri) ?? null;
+      voiceRef.current = found;
+      setVoiceURI(uri);
+      setPreferredVoiceURI(uri);
+    },
+    [voices]
+  );
+
   const speakIndex = useCallback(
     (idx: number) => {
       if (!isSupported || idx < 0 || idx >= paragraphs.length) {
@@ -56,6 +87,7 @@ export function useStoryAudio({
       const utter = new SpeechSynthesisUtterance(paragraphs[idx]);
       utter.rate = speedRef.current;
       utter.lang = "en-US";
+      if (voiceRef.current) utter.voice = voiceRef.current;
       utter.onend = () => {
         if (stoppedRef.current) return;
         const next = idx + 1;
@@ -142,6 +174,7 @@ export function useStoryAudio({
       const utter = new SpeechSynthesisUtterance(text);
       utter.rate = speedRef.current;
       utter.lang = "en-US";
+      if (voiceRef.current) utter.voice = voiceRef.current;
       utter.onend = () => onEnd?.();
       window.speechSynthesis.speak(utter);
     },
@@ -153,6 +186,9 @@ export function useStoryAudio({
     isPlaying,
     isPaused,
     speed,
+    voices,
+    voiceURI,
+    selectVoice,
     currentIndex,
     play,
     pause,

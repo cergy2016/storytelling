@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { Volume2, BookmarkPlus, BookmarkCheck, Languages } from "lucide-react";
 import { Story, VocabularyWord } from "@/types";
 import { useProgressStore } from "@/lib/store";
+import { speakText } from "@/lib/voice";
 import { cn } from "@/lib/utils";
 
 function escapeRegex(s: string) {
@@ -119,13 +120,7 @@ function WordPopover({
   left = Math.max(12, Math.min(left, viewportWidth - width - 12));
   const top = anchorRect.bottom + window.scrollY + 8;
 
-  const speak = () => {
-    if ("speechSynthesis" in window) {
-      const utter = new SpeechSynthesisUtterance(word.word);
-      utter.lang = "en-US";
-      window.speechSynthesis.speak(utter);
-    }
-  };
+  const speak = () => speakText(word.word);
 
   return createPortal(
     <div
