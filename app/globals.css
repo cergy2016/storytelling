@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f5;
+  --surface: #ffffff;
+  --surface-muted: #f3efe8;
+  --foreground: #201c16;
+  --muted: #6b6357;
+  --border: #e7e1d6;
+  --primary: #1f5f4f;
+  --primary-foreground: #ffffff;
+  --accent: #d98a3d;
+  --accent-foreground: #201c16;
+  --ring: #1f5f4f;
+
+  --level-a1: #4f9a6a;
+  --level-a2: #3f9b6f;
+  --level-b1: #2f8fa8;
+  --level-b2: #4463c4;
+  --level-c1: #8a4fc4;
+  --level-c2: #c4437a;
+}
+
+[data-theme="dark"] {
+  --background: #14120f;
+  --surface: #1c1a15;
+  --surface-muted: #24211b;
+  --foreground: #f3efe8;
+  --muted: #a89f8f;
+  --border: #322e26;
+  --primary: #3fae8a;
+  --primary-foreground: #0d1a15;
+  --accent: #e6a75b;
+  --accent-foreground: #1a1208;
+  --ring: #3fae8a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+
+  --color-level-a1: var(--level-a1);
+  --color-level-a2: var(--level-a2);
+  --color-level-b1: var(--level-b1);
+  --color-level-b2: var(--level-b2);
+  --color-level-c1: var(--level-c1);
+  --color-level-c2: var(--level-c2);
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-lora);
+
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+/* Reading mode font-size scale, applied via data-reading-size on the reader container */
+.reading-content {
+  font-size: var(--reading-font-size, 1.125rem);
+  line-height: 1.85;
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 1.6s ease-in-out infinite;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
