@@ -8,6 +8,7 @@ import { c2Stories } from "./c2";
 import { a1ClassicStories } from "./a1-classics";
 import { a2ClassicStories } from "./a2-classics";
 import { b1ClassicStories } from "./b1-classics";
+import { b2ClassicStories } from "./b2-classics";
 import { c1ClassicStories } from "./c1-classics";
 import { c2ClassicStories } from "./c2-classics";
 
@@ -19,6 +20,7 @@ export const allStories: Story[] = [
   ...b1Stories,
   ...b1ClassicStories,
   ...b2Stories,
+  ...b2ClassicStories,
   ...c1Stories,
   ...c1ClassicStories,
   ...c2Stories,
