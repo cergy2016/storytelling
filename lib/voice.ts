@@ -27,9 +27,46 @@ const PREFERRED_HINTS = [
 ];
 
 // Name fragments that reliably indicate a low-quality, robotic-sounding
-// synthesizer (common on Linux/older systems). Always deprioritized, even
-// below voices with no positive hints at all.
-const ROBOTIC_HINTS = ["espeak", "compact", "pico", "flite", "robot", "mbrola"];
+// synthesizer (common on Linux/older systems), or a novelty/joke voice
+// (classic macOS voices like Fred, Zarvox, Bells) never meant for real
+// narration. Always deprioritized, even below voices with no positive
+// hints at all. Includes both English and French names since the browser
+// reports whichever matches the system's display language.
+const ROBOTIC_HINTS = [
+  "espeak",
+  "compact",
+  "pico",
+  "flite",
+  "robot",
+  "mbrola",
+  "fred",
+  "albert",
+  "bahh",
+  "bells",
+  "cloches",
+  "boing",
+  "bubbles",
+  "bulles",
+  "cellos",
+  "violoncelles",
+  "wobble",
+  "good news",
+  "bonnes nouvelles",
+  "bad news",
+  "mauvaises nouvelles",
+  "jester",
+  "bouffon",
+  "junior",
+  "organ",
+  "orgue",
+  "superstar",
+  "ralph",
+  "trinoids",
+  "trinoïdes",
+  "whisper",
+  "murmure",
+  "zarvox",
+];
 
 export function getEnglishVoices(): SpeechSynthesisVoice[] {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return [];
@@ -42,7 +79,13 @@ export function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVo
     const storedURI = window.localStorage.getItem(STORAGE_KEY);
     if (storedURI) {
       const match = voices.find((v) => v.voiceURI === storedURI);
-      if (match) return match;
+      const matchName = match?.name.toLowerCase() ?? "";
+      // Ignore a previously-saved pick if it's actually a novelty/robotic
+      // voice — that was never a deliberate quality choice, just whatever
+      // the heuristic (or a stray click) landed on before this fix.
+      if (match && !ROBOTIC_HINTS.some((hint) => matchName.includes(hint))) {
+        return match;
+      }
     }
   }
   const scored = voices.map((v) => {
