@@ -12,6 +12,7 @@ import {
   Headphones,
   Volume2Icon,
   Mic2,
+  AlertTriangle,
 } from "lucide-react";
 import { Story } from "@/types";
 import { Button } from "./ui/button";
@@ -264,6 +265,24 @@ export function StoryReader({ story }: { story: Story }) {
           </button>
         </div>
       </div>
+
+      {audio.voiceboxBlockedByMixedContent && !audio.voiceboxAvailable && (
+        <div className="mt-4 flex items-start gap-2.5 rounded-2xl border border-amber-300/60 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-500/30 dark:bg-amber-950/40 dark:text-amber-200">
+          <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+          <p>
+            <strong>Voicebox can&apos;t be reached here.</strong> This site is loaded
+            over HTTPS, but Voicebox runs on plain HTTP
+            (<code className="rounded bg-black/5 px-1 py-0.5 dark:bg-white/10">http://127.0.0.1:17493</code>).
+            Browsers always block that combination for security, no matter how
+            Voicebox is configured — this isn&apos;t something CORS or a Voicebox
+            setting can fix. Voicebox narration only works when you run Novella
+            itself locally (e.g. <code className="rounded bg-black/5 px-1 py-0.5 dark:bg-white/10">npm run dev</code>,
+            opened at <code className="rounded bg-black/5 px-1 py-0.5 dark:bg-white/10">http://localhost:3000</code>)
+            on the same machine as Voicebox — or if Voicebox is served over
+            HTTPS with a trusted certificate.
+          </p>
+        </div>
+      )}
 
       {/* Listen First toggle */}
       <label className="mt-4 flex w-fit cursor-pointer items-center gap-2 rounded-full bg-surface-muted px-3 py-1.5 text-xs font-medium text-muted">

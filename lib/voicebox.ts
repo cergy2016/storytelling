@@ -35,9 +35,23 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   }
 }
 
+/**
+ * True when the current page is loaded over HTTPS (as any deployed Vercel
+ * site always is) but Voicebox is configured over plain HTTP. Browsers
+ * block this combination unconditionally as "mixed content" — the fetch
+ * never reaches the network, no matter how Voicebox itself is configured
+ * (CORS, "allow network access", etc. are irrelevant here). This is
+ * checkable purely from the two URLs, with no network call required.
+ */
+export function isMixedContentBlocked(baseUrl = getVoiceboxUrl()): boolean {
+  if (typeof window === "undefined") return false;
+  return window.location.protocol === "https:" && baseUrl.startsWith("http://");
+}
+
 /** Pings Voicebox's /health endpoint. Fails fast (short timeout) since this
  * is usually only reachable when the visitor is running it locally. */
 export async function checkVoiceboxHealth(baseUrl = getVoiceboxUrl()): Promise<boolean> {
+  if (isMixedContentBlocked(baseUrl)) return false;
   try {
     const res = await withTimeout(fetch(`${baseUrl}/health`, { cache: "no-store" }), 1200);
     return res.ok;
@@ -81,6 +95,7 @@ export async function voiceboxGenerate(
   profileId: string | null,
   baseUrl = getVoiceboxUrl()
 ): Promise<string | null> {
+  if (isMixedContentBlocked(baseUrl)) return null;
   try {
     const res = await withTimeout(
       fetch(`${baseUrl}/generate`, {

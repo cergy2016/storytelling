@@ -8,6 +8,7 @@ import {
   getStoredVoiceboxProfile,
   setStoredVoiceboxProfile,
   voiceboxGenerate,
+  isMixedContentBlocked,
   type VoiceboxProfile,
 } from "@/lib/voicebox";
 
@@ -44,6 +45,7 @@ export function useStoryAudio({
   const [voiceboxAvailable, setVoiceboxAvailable] = useState(false);
   const [voiceboxProfiles, setVoiceboxProfiles] = useState<VoiceboxProfile[]>([]);
   const [voiceboxProfileId, setVoiceboxProfileIdState] = useState<string | null>(null);
+  const [voiceboxBlockedByMixedContent, setVoiceboxBlockedByMixedContent] = useState(false);
 
   const indexRef = useRef<number | null>(null);
   const speedRef = useRef<PlaybackSpeed>(1);
@@ -91,6 +93,8 @@ export function useStoryAudio({
   // Detect a locally-running Voicebox server and prefer it automatically
   // when reachable, since it sounds far more natural than browser voices.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time client-side detection
+    setVoiceboxBlockedByMixedContent(isMixedContentBlocked());
     let cancelled = false;
     checkVoiceboxHealth().then(async (ok) => {
       if (cancelled || !ok) return;
@@ -326,6 +330,7 @@ export function useStoryAudio({
     voiceboxAvailable,
     voiceboxProfiles,
     voiceboxProfileId,
+    voiceboxBlockedByMixedContent,
     selectVoiceboxProfile,
     currentIndex,
     play,
