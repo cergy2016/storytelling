@@ -4,7 +4,7 @@ import { Story } from "@/types";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are a curriculum designer for an English-learning app called StoryLevel English. You write original CEFR-leveled short stories with comprehension questions. You must respond with ONLY valid JSON matching the exact schema given — no markdown fences, no commentary.`;
+const SYSTEM_PROMPT = `You are a curriculum designer for an English-learning app called Novella. You write original CEFR-leveled short stories with comprehension questions. You must respond with ONLY valid JSON matching the exact schema given — no markdown fences, no commentary.`;
 
 function buildUserPrompt(p: GenerateStoryParams) {
   return `Write one original short story for CEFR level ${p.level}, on the topic "${p.topic}", approximate length: ${p.length} (respect typical ${p.level} word-count conventions for that length). Focus grammar on: ${p.grammarFocus || "level-appropriate grammar"}. Focus vocabulary on: ${p.vocabularyFocus || p.topic}. ${p.customPrompt ? `Additional instruction: ${p.customPrompt}` : ""}

@@ -175,6 +175,6 @@ export const useProgressStore = create<ProgressState & ProgressActions>()(
 
       reset: () => set(initialState),
     }),
-    { name: "storylevel-progress" }
+    { name: "novella-progress" }
   )
 );

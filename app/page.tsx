@@ -44,7 +44,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
           >
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              <Sparkles size={13} /> 30 original stories · A1 to C2
+              <Sparkles size={13} /> {allStories.length} stories · A1 to C2
             </span>
             <h1 className="mt-6 font-serif text-4xl font-semibold leading-tight sm:text-6xl">
               Improve Your English <br className="hidden sm:block" /> Through Stories.

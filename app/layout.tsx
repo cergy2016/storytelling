@@ -18,9 +18,9 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "StoryLevel English — Learn English Through Stories",
+  title: "Novella — Learn English Through Stories",
   description:
-    "Improve your English through CEFR-leveled stories. Read, listen, understand, and speak — from A1 to C2.",
+    "Novella is a premium English-learning app built around original stories, leveled precisely from A1 to C2. Read or listen, build real vocabulary, test your understanding, and speak with confidence — one story at a time.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,4 +1,4 @@
-const STORAGE_KEY = "storylevel-voice-uri";
+const STORAGE_KEY = "novella-voice-uri";
 
 // Name fragments that tend to indicate a higher-quality, more natural-sounding
 // voice (neural/cloud voices, or well-regarded system voices) versus the

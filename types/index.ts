@@ -1,4 +1,4 @@
-// Core domain types for StoryLevel English
+// Core domain types for Novella
 
 export type CEFRLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 

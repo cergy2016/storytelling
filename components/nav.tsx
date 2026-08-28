@@ -63,7 +63,10 @@ export function Nav() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <BookOpen size={17} />
           </span>
-          StoryLevel <span className="text-primary">English</span>
+          Novella
+          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+            English
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

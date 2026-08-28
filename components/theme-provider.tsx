@@ -16,7 +16,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("storylevel-theme") as Theme | null;
+    const stored = window.localStorage.getItem("novella-theme") as Theme | null;
     const initial =
       stored ??
       (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setTheme = (t: Theme) => {
     setThemeState(t);
     document.documentElement.setAttribute("data-theme", t);
-    window.localStorage.setItem("storylevel-theme", t);
+    window.localStorage.setItem("novella-theme", t);
   };
 
   const toggle = () => setTheme(theme === "light" ? "dark" : "light");

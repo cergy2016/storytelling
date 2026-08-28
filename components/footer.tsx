@@ -9,7 +9,7 @@ export function Footer() {
           <span className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <BookOpen size={13} />
           </span>
-          StoryLevel English
+          Novella <span className="font-normal text-muted">English</span>
         </div>
         <p className="text-center">Read. Listen. Understand. Speak. &copy; {new Date().getFullYear()}</p>
         <div className="flex gap-4">

@@ -1,16 +1,18 @@
-# StoryLevel English
+# Novella
 
-A premium, story-based English learning app. Read or listen to original stories
-written specifically for each CEFR level (A1–C2), test comprehension with
-interactive quizzes, build vocabulary, practice speaking, and track progress —
-all in one learning loop: **discover → read/listen → understand → answer →
-learn vocabulary → speak → track progress → next story**.
+A premium, story-based English learning app. Read or listen to original
+stories written specifically for each CEFR level (A1–C2), test comprehension
+with interactive quizzes, build vocabulary, practice speaking, and track
+progress — all in one learning loop: **discover → read/listen → understand →
+answer → learn vocabulary → speak → track progress → next story**.
 
 ## Features
 
-- **30 original stories**, 5 per CEFR level (A1–C2), across 13 topic categories,
-  each genuinely written for its level's vocabulary, grammar, and cognitive
-  complexity — not just longer or shorter versions of the same text.
+- **60 stories**, 10 per CEFR level (A1–C2) — 5 wholly original plus 5 fresh
+  retellings inspired by public-domain authors (Aesop, O. Henry, Poe, and
+  others) — across 13 topic categories, each genuinely written for its
+  level's vocabulary, grammar, and cognitive complexity, not just a longer or
+  shorter version of the same text.
 - **Immersive reader**: adjustable font size, dark/light reading mode, browser
   text-to-speech narration with speed control (0.75x–1.5x), paragraph repeat,
   and a "Listen First" mode.
