@@ -5,14 +5,24 @@ import { b1Stories } from "./b1";
 import { b2Stories } from "./b2";
 import { c1Stories } from "./c1";
 import { c2Stories } from "./c2";
+import { a1ClassicStories } from "./a1-classics";
+import { a2ClassicStories } from "./a2-classics";
+import { b1ClassicStories } from "./b1-classics";
+import { c1ClassicStories } from "./c1-classics";
+import { c2ClassicStories } from "./c2-classics";
 
 export const allStories: Story[] = [
   ...a1Stories,
+  ...a1ClassicStories,
   ...a2Stories,
+  ...a2ClassicStories,
   ...b1Stories,
+  ...b1ClassicStories,
   ...b2Stories,
   ...c1Stories,
+  ...c1ClassicStories,
   ...c2Stories,
+  ...c2ClassicStories,
 ];
 
 export function getStoryById(id: string): Story | undefined {
