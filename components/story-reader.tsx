@@ -170,22 +170,68 @@ export function StoryReader({ story }: { story: Story }) {
                 </button>
               ))}
             </div>
-            {audio.voices.length > 1 && (
+            {audio.voiceboxAvailable && (
+              <div className="flex items-center overflow-hidden rounded-full border border-border">
+                <button
+                  onClick={() => audio.setEngine("voicebox")}
+                  className={cn(
+                    "px-2.5 py-1.5 text-xs font-semibold",
+                    audio.engine === "voicebox"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted hover:bg-surface-muted"
+                  )}
+                  title="Use your local Voicebox server for narration"
+                >
+                  Voicebox
+                </button>
+                <button
+                  onClick={() => audio.setEngine("browser")}
+                  className={cn(
+                    "px-2.5 py-1.5 text-xs font-semibold",
+                    audio.engine === "browser"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted hover:bg-surface-muted"
+                  )}
+                  title="Use the browser's built-in voices"
+                >
+                  Browser
+                </button>
+              </div>
+            )}
+            {audio.engine === "voicebox" && audio.voiceboxProfiles.length > 0 ? (
               <div className="flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1.5">
                 <Mic2 size={13} className="shrink-0 text-muted" />
                 <select
-                  value={audio.voiceURI ?? ""}
-                  onChange={(e) => audio.selectVoice(e.target.value)}
-                  title="Narration voice"
+                  value={audio.voiceboxProfileId ?? ""}
+                  onChange={(e) => audio.selectVoiceboxProfile(e.target.value)}
+                  title="Voicebox voice profile"
                   className="max-w-[140px] truncate bg-transparent text-xs font-medium text-muted outline-none sm:max-w-[180px]"
                 >
-                  {audio.voices.map((v) => (
-                    <option key={v.voiceURI} value={v.voiceURI}>
-                      {v.name}
+                  {audio.voiceboxProfiles.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
                     </option>
                   ))}
                 </select>
               </div>
+            ) : (
+              audio.voices.length > 1 && (
+                <div className="flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1.5">
+                  <Mic2 size={13} className="shrink-0 text-muted" />
+                  <select
+                    value={audio.voiceURI ?? ""}
+                    onChange={(e) => audio.selectVoice(e.target.value)}
+                    title="Narration voice"
+                    className="max-w-[140px] truncate bg-transparent text-xs font-medium text-muted outline-none sm:max-w-[180px]"
+                  >
+                    {audio.voices.map((v) => (
+                      <option key={v.voiceURI} value={v.voiceURI}>
+                        {v.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )
             )}
           </>
         )}
