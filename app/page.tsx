@@ -81,7 +81,7 @@ export default function HomePage() {
         {/* Story of the Day */}
         <Section title="Story of the Day" subtitle="A fresh 5-minute learning goal, every day">
           <Card className="grid gap-0 overflow-hidden sm:grid-cols-[1fr_1.4fr]">
-            <StoryCover category={dailyStory.category} className="h-48 w-full sm:h-full" iconSize={48} />
+            <StoryCover category={dailyStory.category} storyId={dailyStory.id} className="h-48 w-full sm:h-full" iconSize={48} />
             <div className="flex flex-col justify-center p-6 sm:p-8">
               <LevelBadge level={dailyStory.level} size="sm" />
               <h3 className="mt-3 font-serif text-2xl font-semibold">{dailyStory.title}</h3>

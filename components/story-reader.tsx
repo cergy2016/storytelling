@@ -43,6 +43,21 @@ export function StoryReader({ story }: { story: Story }) {
     onFinished: () => setHasListenedOnce(true),
   });
 
+  // Read the title once before the story text, the first time narration
+  // starts for this story (not on every pause/resume).
+  const titleReadRef = useRef(false);
+  useEffect(() => {
+    titleReadRef.current = false;
+  }, [story.id]);
+  const startListening = (fromIndex: number) => {
+    if (!titleReadRef.current) {
+      titleReadRef.current = true;
+      audio.playSingle(story.title, () => audio.play(fromIndex));
+    } else {
+      audio.play(fromIndex);
+    }
+  };
+
   // Track reading time spent on this story.
   useEffect(() => {
     const start = Date.now();
@@ -91,6 +106,7 @@ export function StoryReader({ story }: { story: Story }) {
     <div>
       <StoryCover
         category={story.category}
+        storyId={story.id}
         className="h-56 w-full rounded-3xl sm:h-72"
         iconSize={64}
       />
@@ -123,7 +139,7 @@ export function StoryReader({ story }: { story: Story }) {
         ) : (
           <>
             {!audio.isPlaying ? (
-              <Button size="sm" onClick={() => audio.play(furthestParagraph)}>
+              <Button size="sm" onClick={() => startListening(furthestParagraph)}>
                 <Play size={15} /> Listen
               </Button>
             ) : audio.isPaused ? (
@@ -227,7 +243,7 @@ export function StoryReader({ story }: { story: Story }) {
               story before reading the text — great practice for real-life listening.
             </p>
             <div className="flex gap-2">
-              <Button onClick={() => audio.play(0)}>
+              <Button onClick={() => startListening(0)}>
                 <Play size={15} /> Start listening
               </Button>
               <Button variant="outline" onClick={() => setHasListenedOnce(true)}>

@@ -107,7 +107,7 @@ export function QuizResults({ story, correct, total, answers, nextStory }: QuizR
 
         {nextStory && (
           <Card className="flex items-center gap-4 p-5">
-            <StoryCover category={nextStory.category} className="h-16 w-16 shrink-0 rounded-xl" iconSize={22} />
+            <StoryCover category={nextStory.category} storyId={nextStory.id} className="h-16 w-16 shrink-0 rounded-xl" iconSize={22} />
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">Next story</p>
               <p className="truncate font-serif font-semibold">{nextStory.title}</p>

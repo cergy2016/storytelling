@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getEnglishVoices, pickBestVoice, setPreferredVoiceURI } from "@/lib/voice";
+import { getEnglishVoices, pickBestVoice, setPreferredVoiceURI, splitIntoSentences } from "@/lib/voice";
 
 export type PlaybackSpeed = 0.75 | 1 | 1.25 | 1.5;
 
@@ -34,8 +34,12 @@ export function useStoryAudio({
   const speedRef = useRef<PlaybackSpeed>(1);
   const stoppedRef = useRef(false);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  const sentenceQueueRef = useRef<string[]>([]);
 
   const speakIndexRef = useRef<(idx: number) => void>(() => {});
+  const speakSentenceRef = useRef<(paragraphIdx: number, sentenceIdx: number) => void>(
+    () => {}
+  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- feature detection must run client-side only
@@ -75,22 +79,15 @@ export function useStoryAudio({
     [voices]
   );
 
-  const speakIndex = useCallback(
-    (idx: number) => {
-      if (!isSupported || idx < 0 || idx >= paragraphs.length) {
-        setIsPlaying(false);
-        setCurrentIndex(null);
-        onFinished?.();
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(paragraphs[idx]);
-      utter.rate = speedRef.current;
-      utter.lang = "en-US";
-      if (voiceRef.current) utter.voice = voiceRef.current;
-      utter.onend = () => {
-        if (stoppedRef.current) return;
-        const next = idx + 1;
+  // Speaking one sentence at a time (rather than a whole paragraph as a
+  // single utterance) with a short pause in between reads far more
+  // naturally on most synthesizers, which otherwise rush flatly through
+  // long text with no phrasing.
+  const speakSentence = useCallback(
+    (paragraphIdx: number, sentenceIdx: number) => {
+      const sentences = sentenceQueueRef.current;
+      if (sentenceIdx >= sentences.length) {
+        const next = paragraphIdx + 1;
         if (next < paragraphs.length) {
           indexRef.current = next;
           setCurrentIndex(next);
@@ -102,14 +99,46 @@ export function useStoryAudio({
           setIsPlaying(false);
           onFinished?.();
         }
+        return;
+      }
+      const utter = new SpeechSynthesisUtterance(sentences[sentenceIdx]);
+      utter.rate = speedRef.current;
+      utter.lang = "en-US";
+      if (voiceRef.current) utter.voice = voiceRef.current;
+      utter.onend = () => {
+        if (stoppedRef.current) return;
+        const pauseMs = Math.round(180 / speedRef.current);
+        window.setTimeout(() => {
+          if (stoppedRef.current) return;
+          speakSentenceRef.current(paragraphIdx, sentenceIdx + 1);
+        }, pauseMs);
       };
+      window.speechSynthesis.speak(utter);
+    },
+    [paragraphs.length, onParagraphChange, onFinished]
+  );
+
+  useEffect(() => {
+    speakSentenceRef.current = speakSentence;
+  }, [speakSentence]);
+
+  const speakIndex = useCallback(
+    (idx: number) => {
+      if (!isSupported || idx < 0 || idx >= paragraphs.length) {
+        setIsPlaying(false);
+        setCurrentIndex(null);
+        onFinished?.();
+        return;
+      }
+      window.speechSynthesis.cancel();
+      sentenceQueueRef.current = splitIntoSentences(paragraphs[idx]);
       indexRef.current = idx;
       setCurrentIndex(idx);
       onParagraphChange?.(idx);
       setIsPlaying(true);
       setIsPaused(false);
       stoppedRef.current = false;
-      window.speechSynthesis.speak(utter);
+      speakSentenceRef.current(idx, 0);
     },
     [isSupported, paragraphs, onParagraphChange, onFinished]
   );

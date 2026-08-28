@@ -23,6 +23,11 @@ const PREFERRED_HINTS = [
   "karen",
 ];
 
+// Name fragments that reliably indicate a low-quality, robotic-sounding
+// synthesizer (common on Linux/older systems). Always deprioritized, even
+// below voices with no positive hints at all.
+const ROBOTIC_HINTS = ["espeak", "compact", "pico", "flite", "robot", "mbrola"];
+
 export function getEnglishVoices(): SpeechSynthesisVoice[] {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return [];
   return window.speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith("en"));
@@ -43,6 +48,7 @@ export function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVo
     PREFERRED_HINTS.forEach((hint, i) => {
       if (name.includes(hint)) score += PREFERRED_HINTS.length - i;
     });
+    if (ROBOTIC_HINTS.some((hint) => name.includes(hint))) score -= 100;
     if (!v.localService) score += 2; // cloud voices are usually higher quality
     if (v.lang.toLowerCase() === "en-us") score += 1;
     if (v.default) score += 1;
@@ -54,6 +60,17 @@ export function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVo
 
 export function setPreferredVoiceURI(uri: string) {
   if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, uri);
+}
+
+/**
+ * Splits a paragraph into sentences so narration can pause briefly between
+ * them. A single long utterance tends to sound flat and rushed on most
+ * synthesizers; short utterances with small gaps read much more naturally.
+ */
+export function splitIntoSentences(text: string): string[] {
+  const matches = text.match(/[^.!?]+[.!?]+(\s+|$)|[^.!?]+$/g);
+  if (!matches) return [text];
+  return matches.map((s) => s.trim()).filter(Boolean);
 }
 
 /** One-off utterance (word pronunciation, etc.) using the best available voice. */

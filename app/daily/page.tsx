@@ -49,7 +49,7 @@ export default function DailyStoryPage() {
       </div>
 
       <Card className="mt-6 overflow-hidden">
-        <StoryCover category={dailyStory.category} className="h-56 w-full" iconSize={56} />
+        <StoryCover category={dailyStory.category} storyId={dailyStory.id} className="h-56 w-full" iconSize={56} />
         <div className="p-6">
           <LevelBadge level={dailyStory.level} />
           <h1 className="mt-3 font-serif text-3xl font-semibold">{dailyStory.title}</h1>

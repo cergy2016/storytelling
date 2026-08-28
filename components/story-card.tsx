@@ -30,7 +30,7 @@ export function StoryCard({ story }: { story: Story }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow hover:shadow-lg hover:shadow-black/5"
     >
       <div className="relative">
-        <StoryCover category={story.category} className="h-36 w-full" />
+        <StoryCover category={story.category} storyId={story.id} className="h-36 w-full" />
         <div className="absolute left-3 top-3">
           <LevelBadge level={story.level} size="sm" showLabel={false} />
         </div>
