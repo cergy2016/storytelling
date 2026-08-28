@@ -21,6 +21,9 @@ const PREFERRED_HINTS = [
   "moira",
   "tessa",
   "karen",
+  "lee",
+  "matilda",
+  "eva",
 ];
 
 // Name fragments that reliably indicate a low-quality, robotic-sounding
